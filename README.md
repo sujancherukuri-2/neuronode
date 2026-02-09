@@ -71,6 +71,21 @@ npm run build
 
 The GitHub Actions workflow builds and deploys automatically to Pages.
 
+## Vercel (Full Stack, Recommended)
+
+Vercel supports the full Next.js stack (API routes + MongoDB). This is the easiest way to deploy the complete app.
+
+1. Go to https://vercel.com and sign in.
+2. Click **New Project** and import `sujancherukuri-2/neuronode`.
+3. Framework: **Next.js** (auto-detected).
+4. Add environment variables:
+	- `MONGODB_URI`
+	- `GEMINI_API_KEY`
+	- `GEMINI_MODEL` (optional, default `gemini-1.5-flash`)
+	- `CRON_SECRET` (optional)
+	- `DECAY_RATE_PER_DAY` (optional, default `0.015`)
+5. Click **Deploy** and use the live URL Vercel provides.
+
 ## Documentation
 
 - Architecture + UX principles: [docs/architecture.md](docs/architecture.md)

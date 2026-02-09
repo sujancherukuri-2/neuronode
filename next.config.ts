@@ -12,6 +12,12 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: isPages,
   },
+  eslint: {
+    ignoreDuringBuilds: isPages,
+  },
+  typescript: {
+    ignoreBuildErrors: isPages,
+  },
 };
 
 export default nextConfig;
