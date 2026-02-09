@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { connectToDatabase } from "@/lib/db";
 import { Note, type NoteDocument } from "@/lib/models/Note";
@@ -34,10 +34,15 @@ function serialize(note: HydratedDocument<NoteDocument>) {
   };
 }
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  _: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   await connectToDatabase();
 
-  const note = await Note.findById(params.id);
+  const { id } = await context.params;
+
+  const note = await Note.findById(id);
 
   if (!note) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -49,8 +54,13 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
   return NextResponse.json({ note: serialize(note) });
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   await connectToDatabase();
+
+  const { id } = await context.params;
 
   const body = await request.json();
   const parsed = noteUpdateSchema.safeParse(body);
@@ -59,7 +69,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
 
-  const note = await Note.findById(params.id);
+  const note = await Note.findById(id);
 
   if (!note) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -93,10 +103,15 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   return NextResponse.json({ note: serialize(note) });
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+export async function DELETE(
+  _: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   await connectToDatabase();
 
-  const note = await Note.findByIdAndDelete(params.id);
+  const { id } = await context.params;
+
+  const note = await Note.findByIdAndDelete(id);
 
   if (!note) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
