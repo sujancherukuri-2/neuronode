@@ -5,6 +5,10 @@ import { Note, type NoteDocument } from "@/lib/models/Note";
 import type { HydratedDocument } from "mongoose";
 import { summarizeAndTag } from "@/lib/ai";
 
+// Disable static generation for this route
+export const dynamic = 'force-dynamic';
+
+
 const linkSchema = z.object({
   label: z.string().min(1),
   url: z.string().url(),
